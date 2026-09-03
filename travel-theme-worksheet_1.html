@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>테마가 있는 여행상품 제안서 — 여행지리 탐구 활동지</title>
+<style>
+:root{
+  --ink:#1c2024; --ink2:#4a545e; --ink3:#7b858f;
+  --line:#e2e6ea; --bg:#f6f7f9; --card:#ffffff;
+  --accent:#0f6f6c; --accent-soft:#e8f3f2;
+  --warn:#b4541f;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  line-height:1.65; font-size:15px;}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px}
+
+/* ---------- header ---------- */
+.hero{background:linear-gradient(135deg,#0f6f6c,#14867f 55%,#3aa08a);
+  color:#fff;border-radius:20px;padding:30px 30px 26px;margin-bottom:22px}
+.hero .kicker{font-size:13px;letter-spacing:.14em;opacity:.85;font-weight:600}
+.hero h1{margin:8px 0 6px;font-size:29px;line-height:1.3;letter-spacing:-.02em}
+.hero p{margin:0;opacity:.92;font-size:14.5px;max-width:70ch}
+.idbar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:20px}
+@media (max-width:860px){.idbar{grid-template-columns:1fr 1fr}}
+.idbar label{display:block;font-size:12px;opacity:.85;margin-bottom:4px}
+.idbar input{width:100%;border:0;border-radius:9px;padding:9px 11px;font-size:14px;
+  background:rgba(255,255,255,.93);color:var(--ink);font-family:inherit}
+
+/* ---------- section ---------- */
+section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 24px 26px;margin-bottom:18px}
+.step{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+.step .num{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--accent);
+  color:#fff;font-weight:700;font-size:15px;display:grid;place-items:center}
+.step h2{margin:0;font-size:20px;letter-spacing:-.01em}
+.lead{color:var(--ink2);font-size:14px;margin:0 0 18px 41px}
+h3{font-size:16px;margin:26px 0 8px;padding-left:11px;border-left:4px solid var(--accent)}
+h3:first-of-type{margin-top:4px}
+.hint{font-size:13px;color:var(--ink3);margin:-2px 0 10px}
+
+/* ---------- umbrella ---------- */
+.umbrella{border:1.5px solid var(--accent);background:linear-gradient(180deg,#f0f8f7,#fbfdfd);
+  border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.umbrella .ulabel{display:inline-block;background:var(--accent);color:#fff;font-size:11.5px;
+  font-weight:700;border-radius:6px;padding:2px 9px;letter-spacing:.04em}
+.umbrella h4{margin:9px 0 6px;font-size:19px}
+.umbrella p{margin:0;font-size:14px;color:var(--ink2)}
+.ucore{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.ucore span{font-size:12.5px;background:#fff;border:1px solid #cfe3e0;color:var(--accent);
+  border-radius:20px;padding:4px 11px;font-weight:600}
+
+/* ---------- topic cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:12px}
+.tcard{position:relative;border:1.5px solid var(--line);border-radius:13px;padding:15px 15px 13px;
+  cursor:pointer;background:#fff;transition:.15s;display:flex;flex-direction:column}
+.tcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 18px rgba(15,111,108,.10)}
+.tcard.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 3px rgba(15,111,108,.12)}
+.tcard .emo{font-size:24px}
+.tcard h4{margin:6px 0 3px;font-size:16px}
+.tcard .one{font-size:13px;color:var(--ink2);margin:0 0 9px;min-height:2.6em}
+.tcard .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto}
+.tcard .tags span{font-size:11px;background:#eef1f4;color:var(--ink2);border-radius:20px;padding:2px 8px}
+.tcard .pick{position:absolute;top:11px;right:12px;font-size:12px;color:var(--accent);font-weight:700;opacity:0}
+.tcard.on .pick{opacity:1}
+.detail{margin-top:14px;border:1px dashed var(--line);border-radius:12px;padding:16px 18px;background:#fbfcfd}
+.detail.empty{color:var(--ink3);font-size:14px;text-align:center;padding:22px}
+.detail h4{margin:0 0 6px;font-size:17px}
+.detail p{margin:0 0 10px;font-size:14px;color:var(--ink2)}
+.detail .row{font-size:13.5px;margin-bottom:6px}
+.detail .row b{color:var(--accent);margin-right:6px}
+.task{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-top:12px}
+.task .tt{font-weight:700;font-size:14.5px;margin-bottom:3px}
+.task .ts{font-size:13px;color:var(--ink2);margin-bottom:10px}
+.egbox{background:var(--accent-soft);border-radius:9px;padding:8px 12px;font-size:13.5px;
+  color:var(--ink);margin-bottom:11px}
+.egtag{background:var(--accent);color:#fff;font-size:11px;font-weight:700;border-radius:5px;
+  padding:1px 7px;margin-right:7px;vertical-align:1px}
+.exrow{display:grid;grid-template-columns:22px 1fr 1.5fr;gap:8px;align-items:center;margin-bottom:7px}
+.exrow .exn{width:22px;height:22px;border-radius:50%;background:#eef1f4;color:var(--ink2);
+  font-size:12px;font-weight:700;display:grid;place-items:center}
+.exrow input{font-size:13.5px;padding:8px 10px}
+@media (max-width:720px){.exrow{grid-template-columns:22px 1fr}.exrow input:last-child{grid-column:2}}
+
+/* ---------- fields ---------- */
+.q{margin-bottom:16px}
+.q .qt{font-size:14.5px;font-weight:600;margin-bottom:2px}
+.q .qs{font-size:12.5px;color:var(--ink3);margin-bottom:6px}
+textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-family:inherit;font-size:14px;color:var(--ink);background:#fff;resize:vertical}
+textarea:focus,input:focus{outline:2px solid rgba(15,111,108,.35);border-color:var(--accent)}
+textarea{min-height:74px}
+.sentence{background:var(--accent-soft);border-radius:12px;padding:16px 18px;margin-top:8px}
+.sentence .line{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px}
+.sentence input{flex:1 1 150px;min-width:120px;background:#fff}
+
+/* ---------- photo blocks ---------- */
+.item{border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:14px;background:#fdfdfe}
+.item > .ih{display:flex;align-items:baseline;gap:9px;margin-bottom:3px}
+.item .badge{background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;
+  border-radius:6px;padding:2px 8px;white-space:nowrap}
+.item .ih strong{font-size:15.5px}
+.item .ig{font-size:13px;color:var(--ink3);margin:0 0 12px}
+.pgrid{display:grid;grid-template-columns:250px 1fr;gap:16px}
+@media (max-width:720px){.pgrid{grid-template-columns:1fr}.idbar{grid-template-columns:1fr 1fr}}
+.photo{border:2px dashed #cfd6dd;border-radius:11px;background:#f3f5f7;min-height:170px;
+  display:grid;place-items:center;text-align:center;overflow:hidden;position:relative;cursor:pointer}
+.photo:hover{border-color:var(--accent);background:#eef4f4}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .ph{font-size:13px;color:var(--ink3);padding:14px}
+.photo .ph b{display:block;font-size:26px;margin-bottom:4px;opacity:.55}
+.pcap{margin-top:7px}
+.pcap input{font-size:13px;padding:7px 10px}
+.prm{margin-top:6px;font-size:12px;color:var(--warn);background:none;border:0;cursor:pointer;padding:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.two{grid-template-columns:1fr}}
+
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#f2f5f7;font-weight:600;font-size:13.5px;color:var(--ink2)}
+td input{border:0;padding:2px 0;background:transparent}
+td input:focus{outline:1px solid var(--accent);border-radius:4px;padding:2px 4px}
+
+/* ---------- reference box ---------- */
+.refbox{border:1px solid #d8e6e4;background:#f7fbfa;border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.refbox .rt{font-weight:700;font-size:14.5px;margin-bottom:3px}
+.refbox .rs{font-size:13px;color:var(--ink2);margin-bottom:11px}
+.reftable{font-size:13px;background:#fff}
+.reftable td{vertical-align:middle}
+.reftable .url{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--accent);word-break:break-all}
+.reftable .org{font-size:11.5px;color:var(--ink3)}
+.refbox .tip{margin-top:11px;font-size:13px;background:#fff;border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:10px 13px;color:var(--ink2)}
+.refbox .tip b{color:var(--ink)}
+
+/* ---------- checklist ---------- */
+.check{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.check:last-child{border-bottom:0}
+.check input{margin-top:4px;width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto}
+
+/* ---------- buttons ---------- */
+.actions{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);
+  border:1px solid var(--line);border-radius:14px;padding:14px 18px;display:flex;flex-wrap:wrap;
+  gap:10px;align-items:center;margin-top:20px;box-shadow:0 -2px 18px rgba(0,0,0,.06)}
+button.btn{border:0;border-radius:10px;padding:11px 17px;font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;background:var(--accent);color:#fff}
+button.btn.ghost{background:#eef1f4;color:var(--ink)}
+button.btn:hover{filter:brightness(1.06)}
+.actions .sp{flex:1}
+.actions .note{font-size:12.5px;color:var(--ink3)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;background:#1c2024;color:#fff;
+  padding:11px 20px;border-radius:24px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+.toast.on{opacity:1}
+
+/* ---------- print ---------- */
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .hero{background:#0f6f6c !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;border-radius:0}
+  .actions,.prm,.no-print{display:none !important}
+  section{break-inside:auto;border-color:#ccc;page-break-inside:auto;margin-bottom:10px}
+  .item,.tcard,.detail{break-inside:avoid;page-break-inside:avoid}
+  .cards{grid-template-columns:repeat(3,1fr)}
+  .tcard:not(.on){opacity:.45}
+  textarea{min-height:0;height:auto}
+  .photo{border-style:solid;border-color:#ddd}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="kicker">여행지리 · 탐구 활동지</div>
+  <h1>테마가 있는 여행상품 제안서</h1>
+  <p>여행은 '어디를 가느냐'보다 '어떤 눈으로 보느냐'로 달라집니다. 오늘은 여러 여행의 결을 훑어본 뒤, 하나의 테마를 골라
+     나만의 여행상품을 기획해 봅시다. 사진과 근거를 갖춘 제안서를 완성하는 것이 목표입니다.</p>
+  <div class="idbar">
+    <div><label>학년 / 반</label><input type="text" data-k="meta_class" placeholder="예: 2학년 3반"></div>
+    <div><label>모둠명</label><input type="text" data-k="meta_team" placeholder="모둠명"></div>
+    <div><label>모둠원 ①</label><input type="text" data-k="meta_m1" placeholder="번호 · 이름"></div>
+    <div><label>모둠원 ②</label><input type="text" data-k="meta_m2" placeholder="번호 · 이름"></div>
+    <div><label>모둠원 ③</label><input type="text" data-k="meta_m3" placeholder="번호 · 이름 (2인 모둠은 비움)"></div>
+  </div>
+</div>
+
+<!-- ===================== STEP 1 ===================== -->
+<section>
+  <div class="step"><div class="num">1</div><h2>주제 후보 훑어보기 &amp; 주제 선정</h2></div>
+  <p class="lead">우리 활동의 큰 우산은 <b>공정여행</b>입니다. 그 아래 여덟 갈래의 테마 중 가장 기획해 보고 싶은 카드를 <b>하나</b> 고르세요. 카드를 누르면 아래에 테마 해설과 함께 <b>사례 찾기·생각할 거리</b> 활동칸이 열립니다.</p>
+
+  <div class="umbrella">
+    <div class="ulabel">큰 카테고리</div>
+    <h4>🤝 공정여행 (Fair Travel)</h4>
+    <p>우리가 쓴 돈의 상당 부분이 대형 리조트나 외국계 여행사로 빠져나가는 구조를 <b>관광 누출(leakage)</b>이라 부릅니다.
+       공정여행은 숙박·식사·가이드를 되도록 지역 주민에게서 구매하고, 주민의 삶을 구경거리로 소비하지 않으며,
+       환경에 남기는 부담을 줄이려는 태도를 지닌 여행입니다. 아래 여덟 테마는 모두 이 질문에서 출발합니다 —
+       <b>“이 여행은 그곳에 무엇을 남기는가?”</b></p>
+    <div class="ucore">
+      <span>지역에 정당한 몫을</span><span>환경 부담은 줄이고</span><span>주민을 대상이 아닌 사람으로</span><span>여행자도 배우고 변화하기</span>
+    </div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+  <div class="detail empty" id="detail">카드를 선택하면 이곳에 테마 해설과 사례, 생각할 거리가 나타납니다.</div>
+
+  <h3>왜 이 주제를 골랐나요?</h3>
+  <div class="q">
+    <div class="qs">다른 후보와 비교했을 때, 이 테마에 끌린 이유를 2~3문장으로 적어 보세요. (개인적 경험, 관심 진로, 사회 문제 등)</div>
+    <textarea data-k="why_topic" placeholder="예) 할머니와 여행할 때 계단 앞에서 몇 번이나 돌아섰던 기억이 있어서…"></textarea>
+  </div>
+</section>
+
+<!-- ===================== STEP 2 ===================== -->
+<section>
+  <div class="step"><div class="num">2</div><h2>유도질문으로 주제 좁히기</h2></div>
+  <p class="lead">'좋은 여행'은 막연합니다. 아래 질문에 답하면서 대상·장소·시기·의미를 구체적인 한 문장으로 좁혀 갑시다.</p>
+
+  <h3>공통 질문 — 기획의 뼈대</h3>
+  <div id="commonQ"></div>
+
+  <h3>선택 주제 심화 질문</h3>
+  <p class="hint" id="themeQHint">주제를 선택하면 그 테마에 맞는 질문이 나타납니다.</p>
+  <div id="themeQ"></div>
+
+  <h3>한 문장으로 좁히기</h3>
+  <p class="hint">빈칸을 채워 내 여행상품의 정체성을 한 문장으로 선언해 보세요. 이 문장이 제안서의 나침반이 됩니다.</p>
+  <div class="sentence">
+    <div class="line">
+      <input type="text" data-k="s1" placeholder="누구를 위한 (대상)"> <span>를 위한,</span>
+      <input type="text" data-k="s2" placeholder="어디에서 (지역·범위)"> <span>에서의,</span>
+    </div>
+    <div class="line" style="margin-top:10px">
+      <input type="text" data-k="s3" placeholder="어떤 경험을 하는 (핵심 활동)"> <span>여행.</span>
+    </div>
+    <div class="line" style="margin-top:10px">
+      <span>이 여행은</span> <input type="text" data-k="s4" placeholder="지역·사람·나에게 남기는 것"> <span>을(를) 남긴다.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STEP 3 ===================== -->
+<section>
+  <div class="step"><div class="num">3</div><h2>조사하고 기록하기 — 제안서 본문</h2></div>
+  <p class="lead">각 항목마다 <b>사진 1장 이상</b>을 찾아 넣고, 그 아래 설명 글을 씁니다. 사진 아래 출처(촬영자·사이트)를 반드시 밝히세요.
+     빈 사진 상자를 클릭하면 파일을 올릴 수 있습니다.</p>
+  <div id="items"></div>
+
+  <h3>추천 일정 한눈에 보기</h3>
+  <p class="hint">1박 2일 또는 2박 3일을 가정하고 표를 채워 보세요.</p>
+  <table>
+    <thead><tr><th style="width:88px">시간대</th><th>1일차</th><th>2일차</th><th>3일차(선택)</th></tr></thead>
+    <tbody id="schedule"></tbody>
+  </table>
+
+  <h3>예상 경비와 지역 환원</h3>
+
+  <div class="refbox">
+    <div class="rt">📚 참고자료 — 여기서 찾으면 됩니다</div>
+    <div class="rs">추측이 아니라 <b>실제 자료</b>로 경비를 계산하세요. 아래 사이트에서 확인한 내용은 어디서 찾았는지 함께 적습니다.</div>
+    <table class="reftable">
+      <thead><tr><th style="width:34%">사이트</th><th style="width:24%">주소</th><th>여기서 무엇을 찾나</th></tr></thead>
+      <tbody>
+        <tr><td>한국관광 데이터랩<br><span class="org">한국관광공사</span></td><td class="url">datalab.visitkorea.or.kr</td>
+            <td>지역별 방문자 수, 관광 소비액(카드 지출)을 업종별로 확인 — 여행객 1인이 그 지역에서 실제로 쓰는 돈의 규모를 가늠할 때</td></tr>
+        <tr><td>대한민국 구석구석<br><span class="org">한국관광공사</span></td><td class="url">korean.visitkorea.or.kr</td>
+            <td>관광지 입장료, 운영 시간, 휴무일, 주차 정보 — 일정과 체험비 계산의 기본 자료</td></tr>
+        <tr><td>코레일 / 고속버스 통합예매</td><td class="url">letskorail.com<br>kobus.co.kr</td>
+            <td>구간별 실제 요금과 소요 시간 — 교통비는 반드시 실제 조회 값으로</td></tr>
+        <tr><td>소상공인 상권정보시스템<br><span class="org">소상공인시장진흥공단</span></td><td class="url">sg.sbiz.or.kr</td>
+            <td>그 지역의 업종별 점포 현황 — 프랜차이즈와 지역 상점의 비율, 어디서 소비할지 판단할 때</td></tr>
+        <tr><td>KOSIS 국가통계포털</td><td class="url">kosis.kr</td>
+            <td>지역 인구·소득·사업체 통계 — "이 지역 경제에서 관광이 차지하는 비중" 같은 근거</td></tr>
+        <tr><td>공공데이터포털</td><td class="url">data.go.kr</td>
+            <td>위 기관들의 원자료(엑셀·API) — 표나 그래프를 직접 만들고 싶을 때</td></tr>
+        <tr><td>탄소발자국 계산기<br><span class="org">한국기후·환경네트워크</span></td><td class="url">kcen.kr/tanso</td>
+            <td>이동수단·거리별 탄소배출량 — 특히 1.5도 기후여행 팀 필수</td></tr>
+        <tr><td>열린관광 모두의 여행<br><span class="org">한국관광공사</span></td><td class="url">access.visitkorea.or.kr</td>
+            <td>열린관광지 목록과 접근성 정보(경사로·휠체어 대여·장애인 화장실) — 모두의 여행 팀 필수</td></tr>
+      </tbody>
+    </table>
+    <div class="tip"><b>지역 환원율 계산 팁</b> — 전체 경비 중 <u>지역 주민·지역 상점에 직접 지급되는 금액</u>을 나눠 백분율로 나타냅니다.
+      예) 총 12만 원 중 지역 게스트하우스 4만 원 + 시장 식사 2만 원 + 주민 가이드 2만 원 = 8만 원 → <b>약 67%</b>.
+      대형 프랜차이즈·플랫폼 수수료로 빠지는 금액은 제외하고 계산하세요.</div>
+  </div>
+
+  <div class="two">
+    <div class="q">
+      <div class="qt">1인 예상 경비</div>
+      <div class="qs">교통·숙박·식사·체험비를 대략적으로 나누어 적고 합계를 내 보세요.</div>
+      <textarea data-k="budget" placeholder="교통 ○○원 / 숙박 ○○원 / 식사 ○○원 / 체험 ○○원 → 합계 ○○원"></textarea>
+    </div>
+    <div class="q">
+      <div class="qt">지출의 몇 %가 지역에 남을까?</div>
+      <div class="qs">대형 프랜차이즈 대신 지역 상점·주민 가이드를 이용하면 얼마나 달라지는지 근거와 함께 적어 보세요.</div>
+      <textarea data-k="localshare" placeholder="예) 숙박을 지역 게스트하우스로 바꾸면 …"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STEP 4 ===================== -->
+<section>
+  <div class="step"><div class="num">4</div><h2>점검하고 마무리하기</h2></div>
+  <p class="lead">제출 전에 스스로 점검하고, 활동을 돌아봅시다.</p>
+
+  <h3>제출 전 체크리스트</h3>
+  <div id="checks"></div>
+
+  <h3>탐구 성찰</h3>
+  <div class="two">
+    <div class="q">
+      <div class="qt">조사하며 가장 놀랐던 사실 한 가지</div>
+      <textarea data-k="ref1" placeholder=""></textarea>
+    </div>
+    <div class="q">
+      <div class="qt">내 여행상품의 한계 또는 더 알아봐야 할 점</div>
+      <textarea data-k="ref2" placeholder=""></textarea>
+    </div>
+  </div>
+  <div class="q">
+    <div class="qt">이 테마의 여행이 널리 퍼진다면 그 지역은 어떻게 달라질까요? (긍정·부정 모두)</div>
+    <textarea data-k="ref3" placeholder="" style="min-height:90px"></textarea>
+  </div>
+</section>
+
+<div class="actions no-print">
+  <button class="btn" onclick="saveHTML()">완성본 저장 (HTML)</button>
+  <button class="btn ghost" onclick="window.print()">인쇄 · PDF로 저장</button>
+  <button class="btn ghost" onclick="saveJSON()">작업 저장 (.json)</button>
+  <button class="btn ghost" onclick="document.getElementById('loadJSON').click()">이어서 작성 (불러오기)</button>
+  <input type="file" id="loadJSON" accept=".json" hidden>
+  <div class="sp"></div>
+  <div class="note">저장하지 않고 창을 닫으면 내용이 사라집니다.</div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script id="savedState" type="application/json">null</script>
+<script>
+/* ============ 데이터 ============ */
+const TOPICS = [
+ {k:'climate',emo:'🌡️',name:'1.5도 기후여행',one:'탄소를 줄이고 기후변화의 현장을 직접 확인하는 여행',
+  tags:['탄소발자국','기후위기','저탄소 이동'],
+  desc:'지구 평균기온 상승을 1.5℃ 이내로 묶자는 목표에서 이름을 딴 여행입니다. 항공 대신 철도·버스, 짧은 거리·긴 체류를 택하고, 해수면 상승·빙하 후퇴·산호 백화·산불 흔적처럼 기후변화가 이미 남긴 지리적 흔적을 관찰합니다.',
+  ex:'유럽 야간열차 여행, 국내 철도 패스 저탄소 코스, 갯벌·습지 탐방, 태양광 마을 견학',
+  think:'"사라지기 전에 보러 가는 여행"이 오히려 그곳의 소멸을 앞당기는 역설을 어떻게 다룰까?',
+  qs:['같은 목적지를 비행기·기차·버스로 갔을 때 1인당 탄소배출량은 각각 얼마인가요? (계산기·자료 출처 명시)',
+      '내가 고른 지역에서 기후변화의 흔적을 눈으로 확인할 수 있는 장소는 어디인가요?',
+      '"적게 이동하고 오래 머문다"를 일정에 어떻게 반영했나요?',
+      '여행자가 실천할 수 있는 저탄소 행동 3가지를 상품 안에 어떻게 끼워 넣겠습니까?']},
+
+ {k:'walk',emo:'🥾',name:'도보여행',one:'시속 4km의 속도로 땅의 결과 사람의 생활을 읽는 여행',
+  tags:['지형 읽기','속도','길'],
+  desc:'걷는 여행은 지형의 고저, 물길, 마을의 배치처럼 차창 밖으로는 보이지 않던 지리를 몸으로 읽게 합니다. 길 자체가 상품이 되는 순례길·둘레길은 지역에 고르게 소비를 퍼뜨리는 장점도 있습니다.',
+  ex:'제주 올레길, 지리산 둘레길, 산티아고 순례길, 서울 도심 근대건축 도보 코스',
+  think:'모두가 걷기 좋은 길이란 없다 — 체력·날씨·안전을 어떻게 설계에 넣을까?',
+  qs:['하루 걷는 거리와 누적 고도는 얼마이며, 그 근거(지도·고도표)는 무엇인가요?',
+      '걸으며 관찰할 수 있는 지형·식생·토지이용의 변화 지점을 3곳 골라 보세요.',
+      '중간의 쉼터·화장실·식수·대피 지점은 어디에 있나요?',
+      '차로 지나쳤다면 절대 못 봤을 장면은 무엇일까요?']},
+
+ {k:'food',emo:'🍲',name:'로컬 미식여행',one:'한 접시에 담긴 기후·지형·역사를 맛으로 읽는 여행',
+  tags:['향토음식','제철','식재료 지리'],
+  desc:'음식은 가장 정직한 지리 교과서입니다. 해류와 갯벌이 만든 해산물, 일교차가 만든 과일, 피란민이 남긴 국밥처럼 지역 음식에는 자연환경과 인문적 사건이 겹겹이 쌓여 있습니다.',
+  ex:'통영 해산물, 안동 간고등어와 염장의 지리, 부산 밀면, 강원 감자·메밀 음식',
+  think:'"맛집 줄서기"와 "음식의 지리를 읽는 여행"은 무엇이 다를까?',
+  qs:['대표 음식의 핵심 재료는 어떤 자연조건(기후·토양·해류) 덕분에 이곳에서 나나요?',
+      '그 음식이 지금의 형태로 굳어진 역사적 계기는 무엇인가요?',
+      '제철·산지 직거래를 지키려면 언제 방문하고 어디서 먹어야 하나요?',
+      '유명 프랜차이즈가 아닌 노포·시장을 코스에 넣었나요? 그 이유는?']},
+
+ {k:'artisan',emo:'🪵',name:'로컬 전문가(장인) 여행',one:'그 지역에서만 이어져 온 손기술과 사람을 만나는 여행',
+  tags:['전통 산업','지역 장인','기술 전승'],
+  desc:'옹기·한지·유기·염색·목공·양조처럼 지역의 자연 재료와 오랜 수요가 만나 만들어진 손기술이 있습니다. 장인의 작업장을 찾아가 재료가 나는 땅부터 완성품까지의 과정을 따라가면, 지역 산업의 지리와 그 산업이 처한 소멸 위기를 함께 보게 됩니다.',
+  ex:'문경 도자기 장인 공방, 원주 한지, 강화 화문석, 안성 유기, 전통주 양조장, 대장간·목수 작업장',
+  think:'체험 프로그램이 장인의 본업을 방해하지 않으려면 무엇을 조율해야 할까?',
+  qs:['이 기술이 하필 이 지역에서 발달한 이유는 무엇인가요? (원료 산지·물·기후·교통·수요와 연결)',
+      '현재 이 일을 하는 사람은 몇 명이며, 이어질 전망은 어떤가요? 자료 출처를 밝히세요.',
+      '여행자가 구경꾼이 아니라 "배우는 사람"이 되도록 어떤 체험을 설계하겠습니까? (시간·인원·비용)',
+      '장인의 작품을 정당한 값에 사는 것이 왜 이 여행의 핵심인가요?']},
+
+ {k:'story',emo:'🎬',name:'스토리텔링 여행',one:'드라마·예술작품의 이야기가 덧씌워진 장소를 현실과 겹쳐 보는 여행',
+  tags:['미디어 관광','장소성','문학·영화'],
+  desc:'드라마·영화·소설·미술이 만든 이미지는 실제 장소의 방문객 수를 바꿔 놓습니다. 다만 화면 속 장소와 주민이 사는 장소는 다르기에, 촬영지 인증샷을 넘어 작품이 왜 그곳을 골랐는지까지 파고들면 훨씬 깊은 여행이 됩니다.',
+  ex:'드라마 촬영지 순례, 이중섭·박수근의 화폭 속 장소, 소설의 배경 도시 걷기, 뮤직비디오 로케이션',
+  think:'촬영지 특수가 끝난 뒤 남는 것은 무엇일까? 관광 열풍과 주민 피로도의 균형은?',
+  qs:['작품이 이 장소를 선택한 이유(경관·역사·상징)를 작품 속 장면과 연결해 설명해 보세요.',
+      '화면 속 이미지와 실제 장소의 모습·분위기는 어떻게 다른가요?',
+      '해당 지역이 작품을 활용해 만든 관광 정책·시설은 무엇이며, 성공했나요?',
+      '주민 생활공간을 침범하지 않으려면 어떤 규칙을 여행자에게 안내해야 할까요?']},
+
+ {k:'barrier',emo:'♿',name:'모두의 여행 (베리어프리)',one:'누구도 문턱 앞에서 돌아서지 않는 여행',
+  tags:['접근성','유니버설 디자인','동행'],
+  desc:'휠체어 이용자, 노인, 유아차를 끄는 부모, 시·청각장애인까지 모두가 쓸 수 있는 이동·숙박·관람 환경을 설계하는 여행입니다. 경사로·저상버스·점자 안내·수어 해설 같은 조건을 실제로 확인하는 조사가 핵심입니다.',
+  ex:'무장애 나눔길, 열린관광지 인증 지역, 휠체어 대여 서비스가 있는 미술관 코스',
+  think:'"배려"가 아니라 "권리"로 접근하면 무엇이 달라질까?',
+  qs:['출발지에서 목적지까지의 이동 경로를 단계별로 점검했나요? (역 엘리베이터, 저상버스, 콜택시 예약 방법)',
+      '숙소와 관람지의 접근성 정보를 어디서 확인했고, 실제로 어떤 정보가 빠져 있었나요?',
+      '시각·청각 정보에 대한 대안(음성 해설, 자막, 촉각 전시)은 마련되어 있나요?',
+      '이 코스가 장애인뿐 아니라 다른 여행자에게도 편한 이유는 무엇인가요?']},
+
+ {k:'dark',emo:'🕯️',name:'메모리얼 투어 (다크투어)',one:'아픔의 현장에서 기억하고 배우는 여행',
+  tags:['역사','기억','추모 윤리'],
+  desc:'전쟁·학살·재난·인권 침해의 장소를 찾아가 그 일이 왜 일어났고 지금 무엇을 남겼는지 배우는 여행입니다. 호기심의 소비가 되지 않도록 태도와 예의가 가장 중요한 테마입니다.',
+  ex:'제주 4·3 유적지, 5·18 사적지, DMZ와 접경지역, 히로시마 평화기념공원, 아우슈비츠',
+  think:'추모의 장소에서 사진을 찍는 일은 어디까지 허용될까?',
+  qs:['이 장소에서 일어난 사건의 배경·경과·이후를 신뢰할 수 있는 자료로 정리했나요? (출처 명시)',
+      '유족과 생존자, 지역 주민에게 이 장소는 어떤 의미인가요?',
+      '여행자가 지켜야 할 태도 수칙을 5가지로 정리해 보세요.',
+      '"기억하는 여행"이 되려면 방문 전·후에 어떤 활동을 덧붙여야 할까요?']},
+
+ {k:'free',emo:'🧭',name:'세상과 연결되는 창의적 여행',one:'앞의 어떤 칸에도 들어가지 않는, 내가 직접 이름 붙이는 여행',
+  tags:['자유 주제','사회 이슈','나만의 테마'],
+  desc:'공정여행의 정신(지역에 남기는 것, 환경 부담, 사람과의 관계)만 지킨다면 테마는 스스로 만들어도 좋습니다. 내가 궁금한 사회 문제나 진로, 좋아하는 것에서 출발해 "○○여행"이라는 이름을 직접 붙여 보세요. 단, 왜 이 여행이 지금 세상과 연결되는지 설명할 수 있어야 합니다.',
+  ex:'인구소멸 마을 살펴보기, 밤하늘 빛공해 없는 별 여행, 청소년 노동·직업 현장 탐방, 이주민의 도시 골목, 폐산업시설 재생 공간, 반려동물 동반 여행, 물 순환 따라가기',
+  think:'"창의적"이라는 말은 신기함이 아니라, 남들이 안 보던 것을 보는 눈에서 나온다.',
+  qs:['내가 만든 여행 테마의 이름과 정의를 한 문장으로 적어 보세요.',
+      '이 테마는 지금 우리 사회의 어떤 변화·문제와 연결되나요? 근거 자료(기사·통계) 하나를 제시하세요.',
+      '앞의 일곱 테마 중 어느 것과 가장 닮았고, 무엇이 다른가요?',
+      '이 여행이 공정여행의 원칙(지역·환경·사람)을 지키고 있음을 어떻게 보여 줄 수 있나요?']}
+];
+
+const COMMON_Q = [
+ ['누구와 함께, 누구를 위한 여행인가요?','연령·관심사·체력·예산을 구체적으로. "청소년"보다 "시험 끝난 고2, 예산 10만 원 이내" 처럼.'],
+ ['왜 하필 지금, 이 여행인가요?','이 테마가 요즘 주목받는 사회적·환경적 배경을 뉴스나 통계 한 가지와 연결해 보세요.'],
+ ['어느 지역으로 좁힐 건가요?','국가 → 지역 → 시·군 → 구체적 장소까지 단계적으로 좁혀 적어 보세요. 좁을수록 좋습니다.'],
+ ['언제 가야 가장 좋은가요?','계절·기후·축제·물때·개화 시기 등 지리적 조건과 연결해 설명해 보세요.'],
+ ['이 여행이 끝난 뒤 무엇이 남나요?','여행자에게 남는 것, 그리고 그 지역에 남는 것을 나누어 적어 보세요.'],
+ ['공정여행의 눈으로 다시 보기','내 여행에서 쓰는 돈이 지역 주민에게 돌아가는 지점은 어디인가요? 반대로 환경·주민에게 부담을 주는 지점은 무엇이며, 어떻게 줄이겠습니까?']
+];
+
+const ITEMS = [
+ {k:'i1',b:'항목 1',t:'여행상품 이름과 한 줄 콘셉트',g:'상품명은 테마가 드러나게. 대표 이미지 1장과 함께 콘셉트를 3~4문장으로 설명하세요.',
+  ph:['대표 이미지'],extra:{k:'i1_name',label:'상품명',type:'text',ph:'예) 문턱 없는 남해, 사흘'}},
+ {k:'i2',b:'항목 2',t:'왜 이곳인가 — 지역의 지리적 특성',g:'위치·지형·기후·산업·인구 등 지리 정보를 근거로 이 지역이어야만 하는 이유를 설명하세요. 지도나 통계 이미지도 좋습니다.',
+  ph:['지역 경관 또는 지도']},
+ {k:'i3',b:'항목 3',t:'핵심 코스 ① 스팟',g:'꼭 들러야 할 첫 번째 장소. 무엇을 보고 무엇을 느끼게 할지 적으세요.',ph:['스팟 ① 사진']},
+ {k:'i4',b:'항목 4',t:'핵심 코스 ② 스팟',g:'두 번째 장소. 앞 스팟과 어떻게 이어지는지(이동수단·소요시간)도 함께.',ph:['스팟 ② 사진']},
+ {k:'i5',b:'항목 5',t:'핵심 코스 ③ 스팟',g:'세 번째 장소. 여행의 절정 또는 마무리가 될 장면을 고르세요.',ph:['스팟 ③ 사진']},
+ {k:'i6',b:'항목 6',t:'테마를 살린 특별 체험',g:'이 테마이기 때문에 가능한 활동(주민 가이드 동행, 제철 재료 요리, 해설사와 걷기 등)을 설계하세요.',ph:['체험 장면']},
+ {k:'i7',b:'항목 7',t:'책임 있는 여행 수칙',g:'여행자가 지켜야 할 약속 5가지를 만들고, 왜 필요한지 근거를 적으세요.',ph:['관련 이미지(안내판, 현장 등)']},
+];
+
+const CHECKS = [
+ '내 여행상품의 테마가 제목만 보아도 드러난다.',
+ '모든 사진에 출처(촬영자·사이트·촬영일)를 밝혔다.',
+ '지역 선정 이유를 지리적 근거(지형·기후·산업 등)로 설명했다.',
+ '일정이 실제로 이동 가능한 시간·거리인지 확인했다.',
+ '예산을 구체적인 숫자로 제시했다.',
+ '이 여행이 지역에 미칠 부정적 영향도 함께 검토했다.',
+ '인용한 통계·기사의 출처를 본문에 적었다.'
+];
+
+/* ============ 렌더링 ============ */
+let selected = null;
+
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+
+// 1. 카드
+const cardsBox = document.getElementById('cards');
+TOPICS.forEach(t=>{
+  const c = el('div','tcard');
+  c.dataset.k = t.k;
+  c.innerHTML = `<div class="pick">✔ 선택됨</div><div class="emo">${t.emo}</div>
+    <h4>${t.name}</h4><p class="one">${t.one}</p>
+    <div class="tags">${t.tags.map(x=>`<span>#${x}</span>`).join('')}</div>`;
+  c.onclick = ()=>selectTopic(t.k);
+  cardsBox.appendChild(c);
+});
+
+function selectTopic(k,silent){
+  selected = k;
+  const t = TOPICS.find(x=>x.k===k);
+  document.querySelectorAll('.tcard').forEach(c=>c.classList.toggle('on',c.dataset.k===k));
+  const d = document.getElementById('detail');
+  d.classList.remove('empty');
+  const sample = t.ex.split(', ')[0];
+  d.innerHTML = `<h4>${t.emo} ${t.name}</h4><p>${t.desc}</p>
+
+    <div class="task">
+      <div class="tt">🔎 사례 찾기 — 이런 여행이 실제로 있을까?</div>
+      <div class="ts">아래 예시를 참고해, 이 테마에 해당하는 실제 사례를 <b>직접 검색해</b> 두 가지 이상 찾아 적으세요.
+        지역·프로그램 이름과 함께, 왜 이 테마의 사례라고 볼 수 있는지 근거를 쓰고 출처(사이트·기사)를 밝힙니다.</div>
+      <div class="egbox"><span class="egtag">예시</span> ${sample}</div>
+      <div class="exrow"><span class="exn">1</span>
+        <input type="text" data-k="ex_${k}_1_name" placeholder="사례 이름 · 지역">
+        <input type="text" data-k="ex_${k}_1_why" placeholder="이 테마의 사례인 이유 + 출처">
+      </div>
+      <div class="exrow"><span class="exn">2</span>
+        <input type="text" data-k="ex_${k}_2_name" placeholder="사례 이름 · 지역">
+        <input type="text" data-k="ex_${k}_2_why" placeholder="이 테마의 사례인 이유 + 출처">
+      </div>
+      <div class="exrow"><span class="exn">3</span>
+        <input type="text" data-k="ex_${k}_3_name" placeholder="(선택) 사례 이름 · 지역">
+        <input type="text" data-k="ex_${k}_3_why" placeholder="(선택) 이유 + 출처">
+      </div>
+    </div>
+
+    <div class="task">
+      <div class="tt">💭 생각할 거리 — 내 생각은?</div>
+      <div class="ts">${t.think}</div>
+      <textarea data-k="think_${k}" placeholder="정답이 없는 질문입니다. 찾은 사례를 근거로 삼아 내 입장을 3문장 이상 써 보세요."></textarea>
+    </div>`;
+  // 심화 질문
+  const box = document.getElementById('themeQ');
+  box.innerHTML='';
+  document.getElementById('themeQHint').textContent = `‘${t.name}’ 기획자라면 반드시 답해야 할 질문들입니다.`;
+  if(k==='free'){
+    const w = el('div','q');
+    w.innerHTML = `<div class="qt">내가 붙인 여행 테마 이름</div>
+      <div class="qs">“○○여행”처럼 한 낱말로 이름 붙여 보세요. 이 이름이 제안서 전체의 기준이 됩니다.</div>
+      <input type="text" data-k="free_title" placeholder="예) 사라지는 마을 여행 / 빛 없는 밤 여행">`;
+    box.appendChild(w);
+  }
+  t.qs.forEach((q,i)=>{
+    const w = el('div','q');
+    w.innerHTML = `<div class="qt">${i+1}. ${q}</div>`;
+    const ta = el('textarea'); ta.dataset.k = 'tq_'+k+'_'+i;
+    w.appendChild(ta); box.appendChild(w);
+  });
+  if(!silent) toast(`‘${t.name}’ 주제를 선택했습니다.`);
+}
+
+// 2. 공통 질문
+const cq = document.getElementById('commonQ');
+COMMON_Q.forEach((q,i)=>{
+  const w = el('div','q');
+  w.innerHTML = `<div class="qt">${i+1}. ${q[0]}</div><div class="qs">${q[1]}</div>`;
+  const ta = el('textarea'); ta.dataset.k='cq_'+i;
+  w.appendChild(ta); cq.appendChild(w);
+});
+
+// 3. 조사 항목
+const itemsBox = document.getElementById('items');
+ITEMS.forEach(it=>{
+  const w = el('div','item');
+  let extra='';
+  if(it.extra) extra = `<div class="q"><div class="qt">${it.extra.label}</div>
+      <input type="text" data-k="${it.extra.k}" placeholder="${it.extra.ph}"></div>`;
+  w.innerHTML = `<div class="ih"><span class="badge">${it.b}</span><strong>${it.t}</strong></div>
+    <p class="ig">${it.g}</p>
+    <div class="pgrid">
+      <div>
+        <div class="photo" data-slot="${it.k}_img">
+          <div class="ph"><b>＋</b>${it.ph[0]}<br>클릭해서 업로드</div>
+        </div>
+        <div class="pcap"><input type="text" data-k="${it.k}_cap" placeholder="사진 설명 · 출처 (예: 직접 촬영 2026.5 / 한국관광공사)"></div>
+        <button class="prm no-print" type="button" style="display:none">사진 지우기</button>
+      </div>
+      <div>${extra}
+        <div class="q"><div class="qt">설명 글</div>
+          <div class="qs">무엇을 조사했고, 그것이 내 테마와 어떻게 연결되는지 5문장 내외로.</div>
+          <textarea data-k="${it.k}_txt" style="min-height:${it.extra?'110px':'150px'}"></textarea>
+        </div>
+      </div>
+    </div>`;
+  itemsBox.appendChild(w);
+});
+
+// 사진 업로드
+document.querySelectorAll('.photo').forEach(p=>{
+  p.addEventListener('click',()=>{
+    const inp = document.createElement('input');
+    inp.type='file'; inp.accept='image/*';
+    inp.onchange = e=>{
+      const f = e.target.files[0]; if(!f) return;
+      const r = new FileReader();
+      r.onload = ev => setPhoto(p, ev.target.result);
+      r.readAsDataURL(f);
+    };
+    inp.click();
+  });
+  const rm = p.parentElement.querySelector('.prm');
+  rm.onclick = e=>{e.stopPropagation(); clearPhoto(p);};
+});
+function setPhoto(p,src){
+  p.innerHTML=''; const img=document.createElement('img'); img.src=src; p.appendChild(img);
+  p.dataset.src = src;
+  p.parentElement.querySelector('.prm').style.display='inline';
+}
+function clearPhoto(p){
+  p.innerHTML = '<div class="ph"><b>＋</b>사진 업로드<br>클릭해서 선택</div>';
+  delete p.dataset.src;
+  p.parentElement.querySelector('.prm').style.display='none';
+}
+
+// 일정표
+const sch = document.getElementById('schedule');
+['오전','점심','오후','저녁','숙박'].forEach((r,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<th>${r}</th>` + [0,1,2].map(d=>
+    `<td><input type="text" data-k="sc_${i}_${d}" placeholder=""></td>`).join('');
+  sch.appendChild(tr);
+});
+
+// 체크리스트
+const cbox = document.getElementById('checks');
+CHECKS.forEach((c,i)=>{
+  const d = el('label','check');
+  d.innerHTML = `<input type="checkbox" data-k="ck_${i}"><span>${c}</span>`;
+  cbox.appendChild(d);
+});
+
+/* ============ 상태 저장/복원 ============ */
+function collect(){
+  const data = {topic:selected, fields:{}, checks:{}, photos:{}};
+  document.querySelectorAll('[data-k]').forEach(f=>{
+    if(f.type==='checkbox') data.checks[f.dataset.k]=f.checked;
+    else data.fields[f.dataset.k]=f.value;
+  });
+  document.querySelectorAll('.photo').forEach(p=>{
+    if(p.dataset.src) data.photos[p.dataset.slot]=p.dataset.src;
+  });
+  return data;
+}
+function apply(data){
+  if(!data) return;
+  if(data.topic) selectTopic(data.topic,true);
+  Object.entries(data.fields||{}).forEach(([k,v])=>{
+    const f=document.querySelector(`[data-k="${k}"]`); if(f) f.value=v;
+  });
+  Object.entries(data.checks||{}).forEach(([k,v])=>{
+    const f=document.querySelector(`[data-k="${k}"]`); if(f) f.checked=v;
+  });
+  Object.entries(data.photos||{}).forEach(([k,v])=>{
+    const p=document.querySelector(`.photo[data-slot="${k}"]`); if(p) setPhoto(p,v);
+  });
+  autosize();
+}
+function fname(ext){
+  const d=collect().fields;
+  const n=[d.meta_class,d.meta_team,d.meta_m1].filter(Boolean).join('_')||'모둠';
+  return `여행상품제안서_${n}.${ext}`;
+}
+function download(blob,name){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function saveJSON(){
+  download(new Blob([JSON.stringify(collect())],{type:'application/json'}), fname('json'));
+  toast('작업 파일을 저장했습니다. 다음 시간에 “이어서 작성”으로 불러오세요.');
+}
+document.getElementById('loadJSON').onchange = e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{ try{ apply(JSON.parse(ev.target.result)); toast('불러왔습니다.'); }
+                 catch(err){ toast('파일을 읽을 수 없습니다.'); } };
+  r.readAsText(f); e.target.value='';
+};
+function saveHTML(){
+  const state = JSON.stringify(collect());
+  const doc = document.documentElement.cloneNode(true);
+  const s = doc.querySelector('#savedState');
+  s.textContent = state;
+  const t = doc.querySelector('#toast'); if(t) t.classList.remove('on');
+  const html = '<!DOCTYPE html>\n' + doc.outerHTML;
+  download(new Blob([html],{type:'text/html;charset=utf-8'}), fname('html'));
+  toast('완성본을 저장했습니다. 파일을 열면 그대로 다시 볼 수 있어요.');
+}
+
+/* ============ 편의 기능 ============ */
+function autosize(){
+  document.querySelectorAll('textarea').forEach(t=>{
+    t.style.height='auto'; t.style.height=Math.max(t.scrollHeight,74)+'px';
+  });
+}
+document.addEventListener('input',e=>{
+  if(e.target.tagName==='TEXTAREA'){
+    e.target.style.height='auto';
+    e.target.style.height=Math.max(e.target.scrollHeight,74)+'px';
+  }
+});
+window.addEventListener('beforeprint',autosize);
+let tid;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(tid); tid=setTimeout(()=>t.classList.remove('on'),2600);
+}
+window.addEventListener('beforeunload',e=>{
+  const d=collect();
+  const dirty = d.topic || Object.values(d.fields).some(v=>v&&v.trim()) || Object.keys(d.photos).length;
+  if(dirty){ e.preventDefault(); e.returnValue=''; }
+});
+
+/* 저장된 상태 복원 */
+try{
+  const saved = JSON.parse(document.getElementById('savedState').textContent);
+  if(saved) apply(saved);
+}catch(err){}
+</script>
+</body>
+</html>
