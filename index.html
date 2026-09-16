@@ -54,7 +54,9 @@ h3:first-of-type{margin-top:4px}
   border-radius:20px;padding:4px 11px;font-weight:600}
 
 /* ---------- topic cards ---------- */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:12px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.cards{grid-template-columns:1fr}}
 .tcard{position:relative;border:1.5px solid var(--line);border-radius:13px;padding:15px 15px 13px;
   cursor:pointer;background:#fff;transition:.15s;display:flex;flex-direction:column}
 .tcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 18px rgba(15,111,108,.10)}
@@ -164,7 +166,8 @@ button.btn:hover{filter:brightness(1.06)}
   .actions,.prm,.no-print{display:none !important}
   section{break-inside:auto;border-color:#ccc;page-break-inside:auto;margin-bottom:10px}
   .item,.tcard,.detail{break-inside:avoid;page-break-inside:avoid}
-  .cards{grid-template-columns:repeat(3,1fr)}
+  .cards{grid-template-columns:repeat(4,1fr)}
+  section{page-break-before:auto}
   .tcard:not(.on){opacity:.45}
   textarea{min-height:0;height:auto}
   .photo{border-style:solid;border-color:#ddd}
@@ -334,8 +337,9 @@ button.btn:hover{filter:brightness(1.06)}
   <button class="btn ghost" onclick="saveJSON()">작업 저장 (.json)</button>
   <button class="btn ghost" onclick="document.getElementById('loadJSON').click()">이어서 작성 (불러오기)</button>
   <input type="file" id="loadJSON" accept=".json" hidden>
+  <button class="btn ghost" id="tempSaveBtn" onclick="tempSave()">임시저장</button>
   <div class="sp"></div>
-  <div class="note">저장하지 않고 창을 닫으면 내용이 사라집니다.</div>
+  <div class="note" id="autosaveStatus">이 브라우저에 자동으로 임시저장됩니다.</div>
 </div>
 
 </div>
@@ -476,6 +480,7 @@ TOPICS.forEach(t=>{
 
 function selectTopic(k,silent){
   selected = k;
+  if(!silent) scheduleAutosave();
   const t = TOPICS.find(x=>x.k===k);
   document.querySelectorAll('.tcard').forEach(c=>c.classList.toggle('on',c.dataset.k===k));
   const d = document.getElementById('detail');
@@ -583,11 +588,13 @@ function setPhoto(p,src){
   p.innerHTML=''; const img=document.createElement('img'); img.src=src; p.appendChild(img);
   p.dataset.src = src;
   p.parentElement.querySelector('.prm').style.display='inline';
+  scheduleAutosave();
 }
 function clearPhoto(p){
   p.innerHTML = '<div class="ph"><b>＋</b>사진 업로드<br>클릭해서 선택</div>';
   delete p.dataset.src;
   p.parentElement.querySelector('.prm').style.display='none';
+  scheduleAutosave();
 }
 
 // 일정표
@@ -665,6 +672,44 @@ function saveHTML(){
   toast('완성본을 저장했습니다. 파일을 열면 그대로 다시 볼 수 있어요.');
 }
 
+/* ============ 임시저장 (브라우저 자동저장) ============ */
+const AUTOSAVE_KEY = 'travelThemeWorksheet_autosave_v1';
+let autosaveTimer;
+
+function tempSave(silent){
+  try{
+    const payload = {data: collect(), ts: Date.now()};
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(payload));
+    updateAutosaveStatus(payload.ts);
+    if(!silent) toast('임시저장했습니다. (이 브라우저에만 저장돼요)');
+  }catch(err){
+    if(!silent) toast('임시저장에 실패했습니다. 저장 공간이 가득 찼을 수 있어요.');
+  }
+}
+function scheduleAutosave(){
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(()=>tempSave(true), 1200);
+}
+function updateAutosaveStatus(ts){
+  const el = document.getElementById('autosaveStatus');
+  if(!el) return;
+  const d = new Date(ts);
+  const hh = d.getHours(), mm = String(d.getMinutes()).padStart(2,'0');
+  const ampm = hh<12?'오전':'오후', h12 = (hh%12)||12;
+  el.textContent = `마지막 임시저장 ${ampm} ${h12}:${mm}`;
+}
+function loadAutosave(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(err){ return null; }
+}
+// 입력이 있을 때마다, 그리고 30초마다 한 번씩 조용히 임시저장
+document.addEventListener('input', scheduleAutosave);
+document.addEventListener('change', scheduleAutosave);
+setInterval(()=>tempSave(true), 30000);
+
 /* ============ 편의 기능 ============ */
 function autosize(){
   document.querySelectorAll('textarea').forEach(t=>{
@@ -689,11 +734,21 @@ window.addEventListener('beforeunload',e=>{
   if(dirty){ e.preventDefault(); e.returnValue=''; }
 });
 
-/* 저장된 상태 복원 */
-try{
-  const saved = JSON.parse(document.getElementById('savedState').textContent);
-  if(saved) apply(saved);
-}catch(err){}
+/* 저장된 상태 복원: ① 파일에 내장된 완성본 상태 → ② 이 브라우저의 임시저장 순으로 확인 */
+(function restore(){
+  let embedded = null;
+  try{ embedded = JSON.parse(document.getElementById('savedState').textContent); }catch(err){}
+  if(embedded){
+    apply(embedded);
+    return;
+  }
+  const saved = loadAutosave();
+  if(saved && saved.data){
+    apply(saved.data);
+    updateAutosaveStatus(saved.ts);
+    toast('이전에 임시저장된 내용을 불러왔습니다.');
+  }
+})();
 </script>
 </body>
 </html>
